@@ -1,6 +1,11 @@
+import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin.Companion.isKaptVerbose
+import org.jetbrains.kotlin.gradle.model.Kapt
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
 }
 
 android {
@@ -59,5 +64,12 @@ dependencies {
     //Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+
+    //DI
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt ("com.google.dagger:hilt-compiler:2.44")
+//    kapt("groupId:artifactId:version")
+
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
 
 }
