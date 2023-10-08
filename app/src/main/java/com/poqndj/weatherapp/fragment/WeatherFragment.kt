@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.poqndj.weatherapp.R
@@ -21,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
     private var _binding: FragmentWeatherBinding? = null
+    lateinit var weatherConstr: ConstraintLayout
     private val binding get() = _binding
     private val mainViewModel: MainViewModel by activityViewModels()
 
@@ -44,6 +46,8 @@ class WeatherFragment : Fragment() {
             binding?.weatherPressureValue?.text = it.pressure.toString()
             binding?.weatherHumidityValue?.text = it.humidity.toString()
             binding?.weatherWindSpeedValue?.text = it.windSpeed.toString()
+            weatherConstr = binding?.weatherConstraint!!
+            weatherConstr.setBackgroundColor(resources.getColor(android.R.color.transparent))
 
             when (it.main) {
                 WEATHER_TYPE_CLEAR -> {

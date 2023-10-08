@@ -1,8 +1,11 @@
 package com.poqndj.weatherapp
 
+import android.content.Context
+import android.inputmethodservice.InputMethodService
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -11,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.textfield.TextInputLayout
 import com.poqndj.weatherapp.databinding.ActivityMainBinding
 import com.poqndj.weatherapp.fragment.ForecastFragment
 import com.poqndj.weatherapp.fragment.WeatherFragment
@@ -27,6 +31,7 @@ import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var tableLayout: TabLayout
+    private lateinit var inputField: TextInputLayout
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +42,19 @@ class MainActivity : AppCompatActivity() {
 
         viewPager = binding.viewPager2
         tableLayout = binding.tabLayout
+        inputField = binding.mainInputField
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            mainViewModel.getCoordinates("London")
+        inputField.setEndIconOnClickListener {
+
+            val inputMetodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as
+                    InputMethodManager
+            if(inputMetodManager.isActive) {
+                inputMetodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
+            }
+
+            lifecycleScope.launch(Dispatchers.Main) {
+                mainViewModel.getCoordinates(inputField.editText?.text.toString())
+            }
         }
 
         mainViewModel.coordinatesResult.observe(this) {

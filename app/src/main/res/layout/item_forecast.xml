@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_recycler_container"
     android:elevation="2dp">
-    
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/weather_container_main"
         android:layout_width="match_parent"
@@ -14,23 +14,29 @@
         android:layout_margin="4dp"
         android:layout_marginVertical="8dp"
         app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:backgroundTint="@android:color/transparent"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingVertical="8dp"
-            android:paddingStart="8dp">
+            android:paddingStart="8dp"
+            android:background="@drawable/rounded_card_10dp_style"
+            >
 
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/item_recycler_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:text="Date"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -40,7 +46,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Temp"
+                android:text="Temp &#8451;"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/item_recycler_date"
                 app:layout_constraintTop_toBottomOf="@+id/item_recycler_date" />
@@ -50,16 +57,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="Description"
+                android:textColor="@color/white"
                 android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/item_recycler_temp"
                 app:layout_constraintTop_toBottomOf="@+id/item_recycler_temp" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:id="@+id/weatherImage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_launcher_background"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
