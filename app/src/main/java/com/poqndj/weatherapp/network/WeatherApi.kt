@@ -1,7 +1,7 @@
 package com.poqndj.weatherapp.network
 
 import com.poqndj.weatherapp.model.currentweather.CurrentWeather
-import com.poqndj.weatherapp.model.forecast.Forecast
+import com.poqndj.weatherapp.model.forecast.FiveDayForecast
 import com.poqndj.weatherapp.model.geocoding.Geocoding
 import retrofit2.Response
 import retrofit2.http.GET
@@ -30,5 +30,5 @@ interface WeatherApi {
         @Query("lon") lon: Double,
         @Query("appId") appId: String,
         @Query("units") units: String
-    ): Response<Forecast>
+    ): Response<FiveDayForecast>
 }

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TableLayout
 import android.widget.TextView
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -15,16 +17,18 @@ import com.poqndj.weatherapp.fragment.WeatherFragment
 import com.poqndj.weatherapp.model.currentweather.CurrentWeather
 import com.poqndj.weatherapp.network.RetrofitHelper
 import com.poqndj.weatherapp.network.WeatherApi
+import com.poqndj.weatherapp.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    lateinit var viewPager: ViewPager2
-    lateinit var tableLayout: TabLayout
-    private val appId = "9b3c31e7dd3739416bf618e764e6d413"
-    private val retrofitClient = RetrofitHelper.getInstance().create(WeatherApi::class.java)
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tableLayout: TabLayout
     private lateinit var binding: ActivityMainBinding
+    private val mainViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -34,27 +38,15 @@ class MainActivity : AppCompatActivity() {
         viewPager = binding.viewPager2
         tableLayout = binding.tabLayout
 
-        lifecycleScope.launch(Dispatchers.IO) {
-//            val result = retrofitClient.getGeocoding("London", "1", appId)
-//////            Log.d("test", "result ${result.body()} is success")
-////            result.body()?.first()
-//            result.isSuccessful
-//
-//            val latResult = result.body()?.first()?.lat ?: 0.0
-//            val lonResult = result.body()?.first()?.lon ?: 0.0
-////
-//            val currentWeather =
-//                retrofitClient.getCurrentWeather(latResult, lonResult, appId, units = "metric")
-//            val forecast = retrofitClient.getForecast(latResult, lonResult, appId, units = "metric")
-////
+        lifecycleScope.launch(Dispatchers.Main) {
+            mainViewModel.getCoordinates("London")
+        }
 
-//            withContext(Dispatchers.Main) {
-//                binding.locationLabel.text = "location $latResult, $lonResult"
-//                binding.currentWeatherLabel.text =
-//                    currentWeather.body()?.weather?.first()?.description
-//                binding.forecastLabel.text =
-//                    forecast.body()?.list?.first()?.weather?.first()?.description
-//            }
+        mainViewModel.coordinatesResult.observe(this) {
+            lifecycleScope.launch(Dispatchers.Main) {
+                mainViewModel.getCurrentWeather(it.lat, it.lon)
+                mainViewModel.getForecast(it.lat, it.lon)
+            }
         }
         prepareViewPager()
 
@@ -70,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
         viewPager.adapter = ViewPagerAdapter(this, fragmentList)
 
-        TabLayoutMediator(tableLayout,viewPager) {tab, position ->
+        TabLayoutMediator(tableLayout, viewPager) { tab, position ->
             tab.text = tabTitleArray[position]
         }.attach()
     }

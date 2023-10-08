@@ -1,5 +1,7 @@
 package com.poqndj.weatherapp.model.forecast
 
+import com.poqndj.weatherapp.model.currentweather.Coord
+
 data class City(
     val coord: Coord,
     val country: String,
